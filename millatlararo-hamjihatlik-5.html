@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Millatlararo hamjihatlik — Tarbiya BSB daftari</title>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ===== 1. ПЕРЕМЕННЫЕ ===== */
+:root{box-sizing:border-box;
+--ink:#1d2f9a;--red:rgba(205,60,60,.5);--rule:rgba(70,110,170,.30);--paper:#fbf8ee;--edge:#e3d9bd;
+--W:100vw;--H:100vh;--pw:min(720px,calc((var(--W) - 24px)/2),calc((var(--H) - 140px)/1.38));--ph:calc(var(--pw)*1.38);--lh:calc(var(--pw)*.072);--shift:calc(var(--pw)/2);
+--hand:"Caveat","Segoe Print","Bradley Hand","Comic Sans MS",cursive;
+--n:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 .4 0 0 0 0 .3 0 0 0 0 .15 0 0 0 .14 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)'/%3E%3C/svg%3E")}
+@media(max-width:700px){:root{--pw:min(560px,calc(var(--W)*.94),calc((var(--H) - 210px)/1.38));--shift:0px}.stage{inset:100px 0 110px 0!important}.book.open.sl{transform:translateX(var(--pw)) rotate(0)}.controls .hb{min-height:44px;font-size:1.2rem}}
+
+/* ===== 2. ПАРТА ===== */
+html,body{height:100%;margin:0;overflow:hidden}body{position:relative;width:100%;max-width:100vw}
+body{overflow:hidden;font-family:var(--hand);color:var(--ink);-webkit-tap-highlight-color:transparent;background:
+radial-gradient(ellipse at 50% 45%,rgba(255,225,170,.30),transparent 65%),
+url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='500' height='500'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.22 .005' numOctaves='3' seed='8'/%3E%3CfeColorMatrix values='0 0 0 0 .22 0 0 0 0 .1 0 0 0 0 .03 0 0 0 1.1 -.2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
+repeating-linear-gradient(90deg,rgba(0,0,0,.4) 0 2px,transparent 2px 240px),
+linear-gradient(90deg,#9a6535,#a8723f 22%,#8c5a2e 45%,#9f6a39 70%,#865529)}
+.scr{position:fixed;inset:0;width:100%;height:100%;pointer-events:none}
+.stage{position:absolute;overflow-x:clip;inset:54px 0 76px 0;display:grid;place-items:center}
+
+/* ===== 3. ТЕТРАДЬ ===== */
+.bob{animation:bob 6s ease-in-out infinite}.bob.open{animation:none}
+@keyframes bob{50%{transform:translateY(-4px)}}
+.book{position:relative;width:var(--pw);height:var(--ph);perspective:2200px;transform:rotate(-3deg);transition:transform 1s cubic-bezier(.6,.05,.3,1)}
+.book.open{transform:translateX(var(--shift)) rotate(0)}
+/* блок бумаги: толщина + тень на парте */
+.book::before{content:"";position:absolute;top:4px;bottom:-6px;left:0;right:-6px;border-radius:3px;
+background:repeating-linear-gradient(90deg,#e9e0c6 0 1px,#d6cbab 1px 2px);
+box-shadow:0 22px 36px rgba(0,0,0,.5),0 3px 8px rgba(0,0,0,.4);transition:left 1s cubic-bezier(.6,.05,.3,1)}
+.book.open::before{left:calc(var(--pw)*-1)}
+.leaf{position:absolute;inset:0;transform-origin:left center;transform-style:preserve-3d;transition:transform 1.1s cubic-bezier(.65,.04,.3,1);cursor:pointer}
+.leaf.flipped{transform:rotateY(-180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:hidden;border-radius:2px 6px 6px 2px}
+.back{transform:rotateY(180deg)}
+.face::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity 1.1s;background:linear-gradient(90deg,rgba(40,25,10,.4),transparent 75%)}
+.leaf.flipped .front::after,.leaf:not(.flipped) .back::after{opacity:1}
+/* линованная бумага */
+.page{--rl:linear-gradient(transparent calc(100% - 1px),var(--rule) 0) 0 calc(var(--lh)*2 - 1px)/100% var(--lh) repeat-y}
+.page.front{background:linear-gradient(90deg,rgba(110,65,30,.24),transparent 8%),linear-gradient(270deg,transparent calc(var(--pw)*.14),var(--red) calc(var(--pw)*.14),var(--red) calc(var(--pw)*.14 + 1.5px),transparent 0),var(--rl),var(--n),var(--paper)}
+.page.back{background:linear-gradient(270deg,rgba(110,65,30,.24),transparent 8%),linear-gradient(90deg,transparent calc(var(--pw)*.14),var(--red) calc(var(--pw)*.14),var(--red) calc(var(--pw)*.14 + 1.5px),transparent 0),var(--rl),var(--n),var(--paper)}
+/* «рукописный» текст синей ручкой */
+.content{position:absolute;inset:calc(var(--lh)*2) calc(var(--pw)*.18) calc(var(--lh)*1.2) calc(var(--pw)*.07);display:block;
+font-size:calc(var(--pw)*.0615);line-height:var(--lh);color:var(--ink);text-shadow:0 0 .7px rgba(20,30,120,.55);letter-spacing:.2px;word-spacing:.1em;overflow:auto;scrollbar-width:none}
+.back>.content{inset:calc(var(--lh)*2) calc(var(--pw)*.07) calc(var(--lh)*1.2) calc(var(--pw)*.18)}.content p{margin:0;text-indent:1.1em}.content p:nth-of-type(odd){transform:rotate(-.25deg)}.content p:nth-of-type(even){transform:rotate(.2deg) translateX(1px)}
+.content h2{margin:0;width:fit-content;font-size:calc(var(--pw)*.085);line-height:calc(var(--lh)*2);padding-bottom:2px;font-weight:700;transform:rotate(-.6deg);
+background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 8' preserveAspectRatio='none'%3E%3Cpath d='M2 5Q40 1 80 5T198 4' fill='none' stroke='%231d2f9a' stroke-width='2' stroke-linecap='round'/%3E%3Cpath d='M10 7Q60 4 120 7' fill='none' stroke='%231d2f9a' stroke-width='1' opacity='.6'/%3E%3C/svg%3E") bottom/100% 7px no-repeat}
+.content s{text-decoration:line-through wavy;text-decoration-thickness:1.5px}
+.content ol{margin:0;padding-left:1.2em}
+.mn{position:absolute;right:2.5%;top:36%;font-size:calc(var(--pw)*.046);writing-mode:vertical-rl;transform:rotate(180deg);border:1.5px solid var(--ink);border-radius:50% 45% 55% 40%;padding:.5em 0;line-height:1.2}
+.num{position:absolute;bottom:calc(var(--lh)*.35);right:calc(var(--pw)*.08);font-size:calc(var(--pw)*.045);opacity:.75}.back>.num{right:auto;left:calc(var(--pw)*.08)}.back>.mn{right:auto;left:2.5%}
+.fig{float:right;width:34%;margin:.1em 0 .1em .6em;filter:url(#wob)}.fig.fgl{float:left;margin:.1em .6em .1em 0}
+.sch{display:block;width:100%;margin-top:.5em;filter:url(#wob)}
+.ti{position:absolute;inset:0 17% 0 6%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;text-shadow:0 0 .7px rgba(20,30,120,.55)}
+.ti svg{width:36%;filter:url(#wob)}
+.ti h1{margin:.1em 0;font-size:calc(var(--pw)*.12);line-height:1;transform:rotate(-1.5deg)}
+.ti .ep{font-size:calc(var(--pw)*.058);line-height:1.15}
+.ti .who{margin-top:.8em;font-size:calc(var(--pw)*.07);line-height:1.1;font-weight:700;transform:rotate(1deg)}
+.dv{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5em;font-size:calc(var(--pw)*.06);text-align:center;transform:rotate(-2deg);padding:0 14% 0 22%}
+.dv svg{width:38%;filter:url(#wob)}
+.gm{display:flex;align-items:center;gap:8%;margin:calc(var(--lh)*.5) 0;cursor:pointer;border:2px solid var(--ink);border-radius:255px 15px 225px 15px/15px 225px 15px 255px;padding:calc(var(--lh)*.3) 6%;transform:rotate(-1deg)}
+.gm:nth-of-type(2){transform:rotate(1.2deg)}
+.gm svg{width:22%;flex:none;filter:url(#wob)}.gm b{font-size:1.5em;line-height:1}.gm small{display:block;font-size:.9em;line-height:1}
+/* рисованные линии (контур ручкой + заливка карандашом) */
+.k{fill:none;stroke:#1d2f9a;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.f{opacity:.65;stroke:none}.y{fill:#f4c542}.g{fill:#74c26f}.b{fill:#7fb2e8}.r{fill:#ee7b6b}
+.tx{font:700 14px var(--hand);fill:#1d2f9a;stroke:none}
+
+/* ===== 4. ЗЕЛЁНАЯ ОБЛОЖКА ===== */
+.cover,.board{background:radial-gradient(circle at 0 0,rgba(255,255,255,.22),transparent 30%),radial-gradient(circle at 100% 100%,rgba(255,255,255,.2),transparent 24%),
+radial-gradient(circle at 100% 0,rgba(255,255,255,.12),transparent 18%),linear-gradient(90deg,rgba(0,0,0,.35),rgba(0,0,0,.08) 5%,transparent 9%),var(--n),#5cb584}
+.cover{inset:-5px -7px -5px -3px;border-radius:3px 9px 9px 3px;color:#1e3b2c}
+.cover svg.wear{position:absolute;inset:0;width:100%;height:100%}
+.cv{position:absolute;left:19%;right:11%;top:27%;font-family:Georgia,"Times New Roman",serif}
+.cv h3{margin:0 0 6%;text-align:center;font-weight:400;font-size:calc(var(--pw)*.07);letter-spacing:.3em}
+.fl{display:flex;align-items:flex-end;gap:.5em;border-bottom:1.5px solid #1e3b2c;font-size:calc(var(--pw)*.04);min-height:calc(var(--pw)*.1);margin-top:calc(var(--pw)*.03)}
+.fl i{font:700 calc(var(--pw)*.075)/1 var(--hand);color:var(--ink);transform:rotate(-1.5deg);margin-left:.2em;text-shadow:0 0 .6px rgba(20,30,120,.6)}
+.fl span+span{margin-left:auto}
+.fl.nm{flex-wrap:wrap;align-items:baseline;row-gap:0}
+.fl.nm i{font-size:calc(var(--pw)*.052);line-height:1.15;margin-left:0;flex:1 1 55%}
+.inside{background:linear-gradient(90deg,rgba(0,0,0,.25),transparent 10%),var(--n),#e9e2cb;border-radius:7px 3px 3px 7px}
+.board{border-radius:2px 8px 8px 2px;display:flex;align-items:center;justify-content:center;text-align:center;font:700 calc(var(--pw)*.1)/1.1 var(--hand);color:var(--ink);padding:12%}
+
+/* ===== 5. ПРЕДМЕТЫ НА ПАРТЕ ===== */
+
+/* ===== 6. РУКОПИСНЫЕ КНОПКИ ===== */
+.hb{font:700 1.35rem var(--hand);color:var(--ink);background:var(--paper) var(--n);border:2.5px solid var(--ink);cursor:pointer;min-height:46px;padding:.2em .9em;position:relative;
+border-radius:255px 14px 225px 14px/14px 225px 14px 255px;box-shadow:2px 3px 0 rgba(0,0,0,.3);transition:transform .15s}
+.hb::after{content:"";position:absolute;inset:-3px -1px -2px -3px;border:1px solid var(--ink);border-radius:14px 255px 14px 225px/225px 14px 255px 14px;transform:rotate(.8deg);opacity:.6;pointer-events:none}
+.hb:active{transform:scale(.92) rotate(-2deg)}.hb:disabled{opacity:.45}
+.controls{position:fixed;left:0;right:0;bottom:calc(14px + env(safe-area-inset-bottom,0px));display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:8px 12px;z-index:40;transition:.5s;pointer-events:none}.controls>*{pointer-events:auto}.controls.hide>*{pointer-events:none}
+.controls.hide{opacity:0;transform:translateY(20px);pointer-events:none}
+.counter{color:#fbe9c4;font-size:1.3rem;min-width:3.4em;text-align:center;text-shadow:0 2px 4px rgba(0,0,0,.7)}
+.hint{position:absolute;left:0;right:0;bottom:calc(86px + env(safe-area-inset-bottom,0px));text-align:center;color:#fbe9c4;font-size:1.6rem;text-shadow:0 2px 4px rgba(0,0,0,.7);transition:opacity .5s;animation:pl 2s ease-in-out infinite;pointer-events:none}
+.hint.hide{opacity:0}@keyframes pl{50%{transform:translateY(-5px)}}
+
+/* ===== 7. ОКНО ИГР / ВИКТОРИНЫ ===== */
+.ov{position:fixed;inset:0;z-index:100;background:rgba(25,18,10,.72);display:none;align-items:center;justify-content:center;padding:10px;overflow:auto}
+.ov.on{display:flex}
+.sheet{width:min(480px,100%);max-height:100%;overflow:auto;border-radius:4px;padding:10px 16px 16px 46px;box-sizing:border-box;color:var(--ink);font-size:1.4rem;line-height:32px;text-shadow:0 0 .6px rgba(20,30,120,.5);
+background:linear-gradient(90deg,transparent 30px,var(--red) 30px,var(--red) 32px,transparent 32px),linear-gradient(transparent 31px,var(--rule) 32px) 0 6px/100% 32px,var(--n),var(--paper);box-shadow:0 10px 40px rgba(0,0,0,.6)}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:1.6rem}.bar b{font-size:1.8rem}
+canvas{display:block;margin:8px auto;touch-action:none;border-radius:3px}
+.pad{display:flex;gap:8px;justify-content:center;margin:8px 0}.pad .hb{flex:1;max-width:84px;min-height:56px;font-size:1.8rem;touch-action:manipulation;user-select:none}
+.sheet>.hb{margin-top:4px}
+.qq{font-size:1.6rem;line-height:1.15;margin:4px 0 10px;font-weight:700}.pg{margin:0;opacity:.7}
+.op{display:block;width:100%;text-align:left;margin:9px 0;line-height:1.15;padding:.35em .9em}
+.op.ok{color:#14702f;border-color:#14702f}.op.no{text-decoration:line-through wavy #b02a2a;opacity:.7}
+.good,.bad{line-height:1.2;margin:8px 0}.bad{color:#9a2a2a}.good{color:#14702f}
+
+body::before{content:"";position:fixed;inset:0;pointer-events:none;box-shadow:inset 0 0 170px 30px rgba(40,18,4,.55)}
+/* ===== 9. РИСОВАНИЕ ===== */
+.dc{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;touch-action:none;z-index:3;-webkit-user-select:none;user-select:none}
+body.drawing{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+body.drawing .dc{pointer-events:auto;cursor:crosshair}body.drawing .leaf{cursor:crosshair}
+.dt{position:fixed;top:calc(8px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);width:min(96vw,740px);box-sizing:border-box;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:6px;z-index:45;padding:6px 8px;background:var(--paper) var(--n);border:2px solid var(--ink);border-radius:6px 14px 8px 12px;box-shadow:2px 5px 12px rgba(0,0,0,.5)}
+.dt[hidden]{display:none}.dt .hb{min-height:38px;min-width:38px;padding:.02em .55em;font-size:1.12rem;touch-action:manipulation}
+.dt .hb.on{background:#d8e0ff;transform:rotate(-2deg) translateY(-2px)}.dt .hb.red{color:#b32a2a;border-color:#b32a2a}
+.dt i{display:inline-block;width:1px;height:26px;background:var(--ink);opacity:.35;margin:0 2px}
+.toast{position:fixed;left:50%;bottom:calc(122px + env(safe-area-inset-bottom,0px));transform:translateX(-50%) rotate(-1.5deg);background:#fff3a0;color:var(--ink);font:700 1.2rem var(--hand);padding:2px 14px;box-shadow:1px 3px 6px rgba(0,0,0,.45);opacity:0;transition:opacity .3s;pointer-events:none;z-index:60;white-space:nowrap}.toast.on{opacity:1}
+.gm .ar{width:14%;margin-left:auto}
+@media(prefers-reduced-motion:reduce){.leaf,.book,.book::before{transition-duration:.01s}.bob,.hint{animation:none}}
+</style>
+</head>
+<body>
+<!-- Рисунки от руки: контур ручкой + заливка цветным карандашом; фильтр wob добавляет дрожь линии -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<filter id="wob"><feTurbulence baseFrequency=".035" numOctaves="2" seed="5"/><feDisplacementMap in="SourceGraphic" scale="2.4"/></filter></defs>
+<symbol id="sun" viewBox="0 0 100 100"><circle class="f y" cx="52" cy="52" r="20"/><path class="k" d="M50 30c12-1 22 9 21 21s-10 21-22 20-21-10-20-22 9-18 21-19z"/><path class="k" d="M53 33c9 2 15 8 16 16"/><path class="k" d="M50 6v13M50 82v12M6 50h13M82 50h12M19 19l9 9M72 72l9 9M81 19l-9 9M28 72l-9 9"/></symbol>
+<symbol id="dove" viewBox="0 0 100 100"><path class="f b" d="M14 62Q32 44 56 52Q68 24 90 28Q80 42 78 54Q94 62 86 72Q70 76 58 70Q42 84 22 76Z"/><path class="k" d="M12 62Q31 42 56 51Q68 22 92 26Q80 41 78 53Q95 61 87 72Q70 77 58 70Q41 84 20 77Q26 70 12 62z"/><path class="k" d="M46 58Q56 46 66 58M82 36h.5M18 88Q40 96 62 88"/><path class="f g" d="M30 92a4 3 0 1 0 .1 0M44 93a4 3 0 1 0 .1 0"/></symbol>
+<symbol id="tree" viewBox="0 0 100 100"><path class="f g" d="M20 56C8 40 24 18 40 24 48 8 74 14 72 32 92 36 88 60 70 60Z"/><path class="k" d="M22 58C6 42 22 16 40 24 50 8 76 12 72 32 94 36 90 62 70 61M22 58Q46 64 70 61"/><path class="k" d="M46 62Q48 80 44 96M58 62Q56 80 60 96M44 96h18"/><circle class="f r" cx="38" cy="40" r="5"/><circle class="f r" cx="62" cy="36" r="5"/></symbol>
+<symbol id="book" viewBox="0 0 100 100"><path class="f y" d="M10 28L50 38 90 28V76L50 86 10 76Z"/><path class="k" d="M9 27L50 38 91 27V77L50 87 9 77ZM50 38V87M18 40l25 6M18 52l25 6M18 64l25 6M82 40l-25 6M82 52l-25 6"/></symbol>
+<symbol id="kids" viewBox="0 0 100 100"><circle class="f r" cx="20" cy="26" r="9"/><circle class="f y" cx="50" cy="24" r="9"/><circle class="f b" cx="80" cy="26" r="9"/><path class="k" d="M20 17a9 9 0 1 1-.5 0zM50 15a9 9 0 1 1-.5 0zM80 17a9 9 0 1 1-.5 0z"/><path class="k" d="M20 36v28M50 34v30M80 36v28M20 46L50 44 80 46M20 64l-9 24M20 64l9 24M50 64l-9 24M50 64l9 24M80 64l-9 24M80 64l9 24"/></symbol>
+<symbol id="flag" viewBox="0 0 100 100"><path class="f b" d="M18 14Q40 6 56 14T92 14V32Q74 40 56 32T18 32Z"/><path class="f g" d="M18 44Q40 36 56 44T92 44V60Q74 68 56 60T18 60Z"/><path class="k" d="M16 6v90M18 14Q40 6 56 14T92 14V60Q74 68 56 60T18 60M18 32Q40 24 56 32T92 32M18 44Q40 36 56 44T92 44"/></symbol>
+<symbol id="heart" viewBox="0 0 100 100"><path class="f r" d="M50 86C16 60 12 36 28 26c10-6 20 0 22 10 2-10 12-16 22-10 16 10 12 34-22 60z"/><path class="k" d="M50 88C14 60 10 34 27 24c11-6 21 0 23 11 2-11 13-17 23-11 17 10 13 36-23 64z"/></symbol>
+<symbol id="tet" viewBox="0 0 100 100"><path class="f b" d="M20 20h20v20H20zM20 40h20v20H20zM40 40h20v20H40zM60 40h20v20H60z"/><path class="f r" d="M40 60h20v20H40zM60 60h20v20H60z"/><path class="k" d="M19 19h22v22H19zM21 41h20v21H21zM40 40h21v21H40zM60 41h21v20H60zM41 60h20v21H41zM60 61h21v20H60z"/></symbol>
+<symbol id="snk" viewBox="0 0 100 100"><path class="k" d="M20 80c-14-8-6-28 10-26s26 6 36-4-4-24-18-22"/><path class="k" d="M24 88c-18-8-12-38 8-36s24 4 30-2-2-14-12-12" opacity=".7"/><circle class="f g" cx="72" cy="30" r="12"/><path class="k" d="M72 18a12 12 0 1 1-.5 0zM76 28h.5M80 38l8 4m-8-4l8-2"/><circle class="f r" cx="20" cy="20" r="8"/><path class="k" d="M20 12a8 8 0 1 1-.5 0zM20 12q2-6 6-6"/></symbol></svg>
+
+<svg class="scr" viewBox="0 0 1000 700" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><g fill="none" stroke-linecap="round"><path d="M80 120q60-20 140 5M700 600q80 30 190 10M880 90l60 40M120 560l90-30M470 40q60 10 120-4" stroke="#e8c79a" stroke-width="1.2" opacity=".4"/><path d="M60 300q30-20 60 0t60 0" stroke="#1d2f9a" opacity=".3" stroke-width="2"/><path d="M910 380l8 18 20 2-15 13 5 20-18-10-18 10 5-20-15-13 20-2z" stroke="#2a3aa0" opacity=".35" stroke-width="1.8"/><path d="M40 410q20-30 40 0M60 380v-8" stroke="#555" opacity=".3" stroke-width="2"/><path d="M820 560v60M850 560v60M800 580h70M800 600h70M806 566l14 14M836 606l14 12" stroke="#2a3aa0" opacity=".3" stroke-width="2"/><path d="M300 40q40 14 90 2M640 660q50-12 120 6M960 250q-10 40 6 80" stroke="#e8c79a" stroke-width="1.2" opacity=".4"/><circle cx="560" cy="660" r="9" stroke="#1d2f9a" opacity=".25" stroke-width="2"/></g><text x="40" y="660" font-size="30" fill="#2a3aa0" opacity=".3" font-family="Caveat,cursive" transform="rotate(-4 40 660)">8-sinf ✎ Ismoil</text></svg>
+
+<main class="stage"><div class="bob" id="bob"><div class="book" id="nb"></div></div></main>
+<div class="hint" id="hint">Daftarni ochish uchun bosing ✎</div>
+
+<nav class="controls hide" id="controls"><button class="hb" id="prev">← Orqaga</button><span class="counter" id="counter"></span><button class="hb" id="next">Oldinga →</button><button class="hb" id="dm" disabled>✎ Chizish</button></nav>
+<div class="dt" id="dt" hidden role="toolbar" aria-label="Chizish asboblari"><button class="hb" data-t="pen">Ruchka</button><button class="hb" data-t="pencil">Qalam</button><button class="hb red" data-t="red">Qizil</button><button class="hb" data-t="eraser">Oʻchirgich</button><i></i><button class="hb" data-w="1" aria-label="Ingichka">·</button><button class="hb" data-w="2" aria-label="Oʻrtacha">•</button><button class="hb" data-w="3" aria-label="Yogʻon">●</button><i></i><button class="hb" id="un" aria-label="Bekor qilish">↶</button><button class="hb" id="re" aria-label="Qaytarish">↷</button><button class="hb" id="cl">Tozalash</button><button class="hb" id="ex">✕</button></div>
+<div class="toast" id="toast" role="status"></div>
+
+
+<div class="ov" id="ov"><div class="sheet" id="sheet"></div></div>
+
+<script>
+/* ============ ДАННЫЕ: страницы тетради (узбекский язык) ============ */
+// [sarlavha, matn, rasm, chetdagi belgi]
+const P=[
+['Kirish','<p>Men bu ishni millatlararo hamjihatlik haqida yozdim, chunki biz turli xalqlar yonma-yon yashaydigan yurtda yashaymiz. Sinfimizda ham, mahallamizda ham turli millat vakillari bor. Ular bilan birga oʻqiymiz, oʻynaymiz, bayramlarni nishonlaymiz. Shu mavzu menga juda yaqin.</p>','sun','muhim!'],
+['Hamjihatlik nima?','<p>Hamjihatlik — odamlarning kelishib, <s>bir-biridan</s> bir-biriga suyanib yashashi. Millatlararo hamjihatlik esa turli millat vakillarining hurmat, ishonch va doʻstlik asosida birga yashashi. Bu yerda hech kim ustun yoki past emas, hamma teng. Masalan, qoʻshnimiz boshqa millatdan boʻlsa ham, biz bir-birimizning bayramiga boramiz.</p>','kids',''],
+['Bagʻrikenglik','<p>Bagʻrikenglik (tolerantlik) — boshqalarning fikri, urf-odati va dinini hurmat qilish. Bu shunchaki chidash emas, tushunishga harakat qilish. Har yili 16-noyabr — Xalqaro bagʻrikenglik kuni. Men oʻzimga qoida qoʻydim: kimdir boshqacha gapirsa yoki kiyinsa, kulmayman, avval soʻrayman va tinglayman.</p>','heart','qoida!'],
+['Oʻzbekistonda','<p>Oʻzbekistonda yuzdan ortiq millat va elat vakillari yashaydi. Konstitutsiyamiz hammaning tilini va urf-odatini hurmat qilishni kafolatlaydi. Maktablarda taʼlim bir necha tilda olib boriladi: oʻzbek, qoraqalpoq, rus, qozoq, tojik, turkman va qirgʻiz tillarida.</p>','flag',''],
+['Anʼana va urf-odatlar','<p>Har xalqning oʻz bayrami, taomi, kuyi va liboslari bor. Navroʻz — 21-mart — bahor bayrami, uni koʻp xalqlar birga kutib oladi. Dasturxon atrofida oʻzbek taomlari ham, boshqa xalqlarning milliy taomlari ham boʻladi. Bir-birining anʼanasini bilish odamlarni yaqinlashtiradi.</p>','tree','21-mart'],
+['Doʻstlik va hamkorlik','<p>Doʻstlikda millat soʻralmaydi, odamning qanday ekani muhim. Hamkorlik — birgalikda ish qilish: sinfdoshlar bilan loyiha tayyorlaymiz, har kim oʻz bilganini qoʻshadi. Maqolda aytilganidek: «Yolgʻiz otning changi chiqmas». Ya’ni birlikda kuch bor.</p>','heart',''],
+['Tinchlikning ahamiyati','<p>Tinchlik boʻlsa, maktablar ochiq, bolalar qoʻrqmay oʻynaydi, ota-onalar xotirjam ishlaydi. Urush esa uylarni va taqdirlarni buzadi. 21-sentabr — Xalqaro tinchlik kuni. Birlashgan Millatlar Tashkiloti 1945-yilda aynan tinchlikni saqlash maqsadida tuzilgan.</p>','dove','1945'],
+['Yoshlarning roli','<p>Kelajak bizniki, demak, hamjihatlikni saqlash ham bizning vazifamiz. Yoshlar boshqa millat vakillari bilan doʻstlashishi, nafratga undovchi gaplarga uchmasligi, ijtimoiy tarmoqlarda ham hurmat bilan yozishi kerak. Kichik ishlar ham muhim: salom berish, yordam soʻragan odamga qoʻl choʻzish.</p>','kids',''],
+['Maktabda doʻstlik','<p>Maktabda bizning oilamiz — sinf. Yangi oʻquvchi kelsa, uni yolgʻiz qoldirmaslik kerak: tanishish, tanaffusda oʻyinga taklif qilish yetarli. Darsni tushunmagan sinfdoshga tushuntirib berish — haqiqiy yordam. Biz bir-birimizdan oʻrganamiz.</p>','book','yordam'],
+['Madaniyatlarni oʻrganish','<p>Boshqa xalqlar madaniyatini oʻrganish dunyoni kengaytiradi. Kitob oʻqish, kino koʻrish, doʻstlarimizdan bayramlari haqida soʻrash — hammasi yaxshi yoʻl. Buyuk Ipak yoʻli Sharq va Gʻarbni bogʻlagan, Oʻzbekiston shaharlari esa savdogaru olimlar uchrashadigan joy boʻlgan.</p>','book',''],
+['Nizolarni tinch hal qilish','<p>Kelishmovchilik har doim boʻladi, muhimi — uni qanday hal qilish. Avval jahlni bosamiz, keyin tinglaymiz, soʻng fikrimizni xotirjam aytamiz. Kerak boʻlsa, oʻqituvchidan yordam soʻraymiz. Qoida: soʻz bilan, kuch bilan emas. Kechirim soʻrash — kuchlilik belgisi.</p>','dove','soʻz bilan!'],
+['Hayotiy voqea','<p>Sinfimizga Dauren ismli bola kelib qoʻshildi. U oʻzbekchani yaxshi bilmasdi va tanaffusda jim turardi. Biz uni futbolga chaqirdik. Bir oydan soʻng u hamma bilan doʻst boʻldi, biz esa undan qozoqcha salomlashishni oʻrgandik: «Salemetsiz be!»</p>','kids','doʻst!'],
+['Xulosa','<p>Xulosa qilib aytsam, millatlararo hamjihatlik — tinchlik va taraqqiyotning asosi. Uni hurmat, bagʻrikenglik, doʻstlik va oʻzaro yordam bilan saqlaymiz. Har birimiz bunga hissa qoʻsha olamiz. Yurtimiz tinch, xalqimiz ahil boʻlsin!</p>','sun','']];
+
+/* Viktorina: savollar daftar matnidan */
+const Q=[
+{q:'Millatlararo hamjihatlik nima?',a:['Turli millat vakillarining hurmat va doʻstlik bilan birga yashashi','Faqat bir millat vakillarining birga yashashi','Bir-biridan uzoq yashash'],c:0,e:'Hamjihatlik — hurmat, ishonch va doʻstlik asosida birga yashash.'},
+{q:'Bagʻrikenglik (tolerantlik) nimani anglatadi?',a:['Hamma bilan bahslashishni','Boshqalarning fikri va urf-odatini hurmat qilishni','Faqat oʻz fikrini aytishni'],c:1,e:'Bagʻrikenglik — boshqalarni hurmat qilish va tushunishga harakat qilish.'},
+{q:'Xalqaro bagʻrikenglik kuni qachon nishonlanadi?',a:['1-sentabr','21-mart','16-noyabr'],c:2,e:'Har yili 16-noyabr — Xalqaro bagʻrikenglik kuni.'},
+{q:'Navroʻz bayrami qachon nishonlanadi?',a:['21-mart','8-dekabr','21-sentabr'],c:0,e:'Navroʻz — 21-mart, bahor bayrami; uni koʻp xalqlar birga kutib oladi.'},
+{q:'Xalqaro tinchlik kuni qachon?',a:['1-yanvar','21-sentabr','16-noyabr'],c:1,e:'21-sentabr — Xalqaro tinchlik kuni.'},
+{q:'Oʻzbekiston maktablarida taʼlim qanday tillarda olib boriladi?',a:['Faqat oʻzbek tilida','Faqat rus tilida','Bir necha tilda: oʻzbek, qoraqalpoq, rus, qozoq va boshqalar'],c:2,e:'Maktablarda taʼlim bir necha tilda olib boriladi.'},
+{q:'Buyuk Ipak yoʻli nimani bogʻlagan?',a:['Faqat ikki qishloqni','Sharq va Gʻarbni','Okeanlarni'],c:1,e:'Ipak yoʻli Sharq va Gʻarbni bogʻlab, xalqlarni uchrashtirgan.'},
+{q:'Sinfga yangi oʻquvchi kelsa, nima qilish kerak?',a:['Tanishib, tanaffusda oʻyinga taklif qilish','Eʼtibor bermaslik','Uning ustidan kulish'],c:0,e:'Yangi oʻquvchini yolgʻiz qoldirmaslik kerak.'},
+{q:'Nizo chiqqanda birinchi qadam qanday?',a:['Baqirish','Jahlni bosib, tinglash','Aloqani uzish'],c:1,e:'Avval jahlni bosamiz, keyin tinglaymiz va xotirjam gapiramiz.'},
+{q:'Hikoyadagi Dauren sinfdoshlarga nimani oʻrgatdi?',a:['Qozoqcha salomlashishni','Shaxmat oʻynashni','Inglizcha qoʻshiqni'],c:0,e:'Bolalar undan «Salemetsiz be!» deb salomlashishni oʻrgandi.'},
+{q:'«Yolgʻiz otning changi chiqmas» maqoli nimani bildiradi?',a:['Otlar tez yuguradi','Yolgʻizlik yaxshi','Birlikda kuch bor'],c:2,e:'Maqol birlik va hamkorlikning kuchini anglatadi.'},
+{q:'Birlashgan Millatlar Tashkiloti qachon tuzilgan?',a:['1945-yilda','1991-yilda','2000-yilda'],c:0,e:'BMT 1945-yilda tinchlikni saqlash maqsadida tuzilgan.'}];
+
+/* ============ SAHIFALARNI YIGʻISH ============ */
+const dd=(s,n)=>`<svg class="fig ${n%2?'fgl':'fgr'}" viewBox="0 0 100 100"><use href="#${s}"/></svg>`;
+const L=[]; // har bir element: varaq
+const leaf=(f,b,i)=>`<div class="leaf"><div class="face front page">${f}<canvas class="dc" data-k="f${i}"></canvas></div><div class="face back page">${b}<canvas class="dc" data-k="b${i}"></canvas></div></div>`;
+const pg=(n,h,body,m)=>`<div class="content"><h2>${h}</h2>${body}</div>${m?`<span class="mn">${m}</span>`:''}<span class="num">${n}</span>`;
+// 1-bet: titul; 2–14: mavzular; 15: savollar; 16: oʻyinlar
+L.push(`<div class="ti"><svg viewBox="0 0 100 100"><use href="#kids"/></svg><h1>Millatlararo hamjihatlik</h1><div class="ep">«Birlashgan — oʻzar,<br>birlashmagan — toʻzar.»</div><div class="who">Baxtiyorov Ismoil<br>102-maktab, 8-sinf<br>Tarbiya BSB</div></div>`);
+const X=['Daftarimda hamjihatlik nima ekanini, nega kerakligini va uni qanday saqlash mumkinligini oʻz soʻzlarim bilan yozishga harakat qildim.', 'Menimcha, hamjihatlik avvalo bir-birini tinglay olishdan boshlanadi.', 'Bagʻrikenglik — zaiflik emas, aksincha, oʻziga ishongan odamning belgisi.', 'Shuning uchun mamlakatimizda har bir bola oʻz ona tilida oʻqish va urf-odatlarini saqlash huquqiga ega.', 'Bayramlarda qoʻshnilar bir-birinikiga mehmonga borib, bir-birini tabriklashadi.', 'Haqiqiy doʻst qiyin paytda yonida turadi va hech qachon ustingdan kulmaydi.', 'Shuning uchun tinchlikni asrash har bir insonning, har bir oilaning burchi.', 'Biz bugun maktabda oʻrgangan odobimiz ertaga butun jamiyatga koʻchadi.', 'Sinfda hamma ahil boʻlsa, dars ham qiziqarli, kayfiyat ham yaxshi boʻladi.', 'Boshqa xalqning tilidan bir-ikki soʻz bilish ham hurmat belgisi hisoblanadi.', 'Kelishmovchilikdan keyin yarashib olish doʻstlikni yanada mustahkamlaydi.', 'Bu voqeadan men bitta narsani tushundim: yangi odamga birinchi boʻlib qoʻl uzatish kerak.', 'Shu mavzuni yozish menga hamjihatlik haqida koʻproq oʻylashga yordam berdi.'];
+P.forEach((p,i)=>L.push(pg(i+2,p[0],dd(p[2],i+2)+p[1]+'<p>'+X[i]+'</p>',p[3])));
+// 14-bet: savollar va chizma
+L.push(pg(15,'Savol va topshiriqlar',`<ol><li>Bagʻrikenglik nima?</li><li>Navroʻz qachon nishonlanadi?</li><li>Sinfdoshing bilan nizo chiqsa, nima qilasan?</li></ol>
+<svg class="sch" viewBox="0 0 200 150"><path class="k" d="M100 50c14 0 24 10 24 22s-10 22-24 22-25-10-24-23 10-21 24-21z"/><path class="k" d="M101 53c12 1 20 8 21 18" opacity=".6"/><text class="tx" x="100" y="76" text-anchor="middle">Hamjihatlik</text>
+<path class="k" d="M78 58L44 34M122 58l34-24M78 88L44 116M122 88l34 28M44 34l9 1M44 34l3 9M156 34l-9 1M156 34l-3 9M44 116l9-1M44 116l3-9M156 116l-9-1M156 116l-3-9"/>
+<text class="tx" x="20" y="24">hurmat</text><text class="tx" x="140" y="24">doʻstlik</text><text class="tx" x="18" y="136">tinchlik</text><text class="tx" x="146" y="136">yordam</text></svg>`,'sxema'));
+// 16-bet: oʻyinlar va viktorina (daftarning oxirgi sahifasi)
+L.push(`<div class="content"><h2>Oʻyinlar va viktorina</h2><p>Bittasini tanlab, chiziq ustiga bos. Tugagach «← Daftarga» shu betga qaytaradi.</p>
+<div class="gm" data-g="tetris" role="button" tabindex="0"><svg viewBox="0 0 100 100"><use href="#tet"/></svg><div><b>Tetris</b><small>chiziqni toʻldir!</small></div><svg class="ar" viewBox="0 0 40 24"><path class="k" d="M2 14Q16 4 34 12M27 5l8 7-9 6"/></svg></div>
+<div class="gm" data-g="snake" role="button" tabindex="0"><svg viewBox="0 0 100 100"><use href="#snk"/></svg><div><b>Ilon</b><small>olmani yeb, oʻs!</small></div><svg class="ar" viewBox="0 0 40 24"><path class="k" d="M2 14Q16 4 34 12M27 5l8 7-9 6"/></svg></div>
+<div class="gm" data-g="quiz" role="button" tabindex="0"><svg viewBox="0 0 100 100"><use href="#book"/></svg><div><b>Viktorina</b><small>bilimingni tekshir</small></div><svg class="ar" viewBox="0 0 40 24"><path class="k" d="M2 14Q16 4 34 12M27 5l8 7-9 6"/></svg></div></div><span class="mn">bos!</span><span class="num">16</span>`);
+/* ============ DAFTAR: OCHILISH VA VARAQ AYLANTIRISH ============ */
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const book=$('#nb'),bob=$('#bob');
+const cover=`<div class="leaf" tabindex="0" role="button" aria-label="Daftarni ochish"><div class="face front cover">
+<svg class="wear" viewBox="0 0 100 140" preserveAspectRatio="none"><path d="M6 20l10 3M70 120l14-5M88 12l-6 8M30 130l9-2M12 90l3 9" stroke="#fff" stroke-width=".5" opacity=".45" fill="none"/><path d="M0 0h6l-6 5zM100 140h-7l7-6z" fill="#e8f4e8" opacity=".5"/></svg>
+<div class="cv"><h3>DAFTAR</h3><div class="fl nm"><span>Oʻquvchilar:</span><i>Fayzullox, Abdirashd, Solih, Ismoil, Sardor</i></div><div class="fl"><span>Sinf:</span><i>8</i><span>Maktab:</span><i>102</i></div><div class="fl"><span>Fan:</span><i>Tarbiya BSB</i></div></div></div>
+<div class="face back inside"><div class="dv" style="padding:0 10%"><svg viewBox="0 0 100 100"><use href="#dove"/></svg><span>Bu daftar — doʻstlik va tinchlik haqida</span></div></div></div>`;
+book.innerHTML=cover+Array.from({length:L.length/2},(_,k)=>leaf(L[2*k],L[2*k+1],k)).join('')+`<div class="leaf"><div class="face front board">Tinchlik va birlik bilan!</div></div>`;
+const leaves=$$('.leaf'),N=leaves.length,PAGES=L.length;
+let idx=0,target=0,timer=null,cur=null,drawing=false,side='r';const single=()=>matchMedia('(max-width:700px)').matches;
+leaves.forEach((l,i)=>l.style.zIndex=40-i);
+function setIdx(n){idx=n;leaves.forEach((l,i)=>{const f=i<n;if(f===l.classList.contains('flipped'))return;l.classList.toggle('flipped',f);setTimeout(()=>l.style.zIndex=f?i+1:40-i,450)});ui();onPage()}
+function ui(){const o=idx>0,sg=single(),L2=2*idx-2,R2=2*idx-1,end=idx>=N-1&&(!sg||side==='r');
+ book.classList.toggle('open',o);book.classList.toggle('sl',o&&sg&&side==='l');bob.classList.toggle('open',o);$('#hint').classList.toggle('hide',o);$('#controls').classList.toggle('hide',!o);
+ $('#prev').disabled=!o;$('#dm').disabled=!o;if(!o&&drawing)setDraw(false);$('#next').textContent=end?'Boshidan ↺':'Oldinga →';
+ $('#counter').textContent=!o?'':(sg?(idx>=N-1&&side==='r'?'Tamom':(side==='l'&&idx>=2?L2:R2)+' / '+PAGES):idx===1?'1 / '+PAGES:idx>=N-1?L2+' / '+PAGES:L2+'–'+R2+' / '+PAGES)}
+function goTo(t){target=Math.max(0,Math.min(N-1,t));clearInterval(timer);timer=setInterval(()=>{if(idx===target)return clearInterval(timer);setIdx(idx+(target>idx?1:-1))},140)}
+function next(){
+ if(idx===0&&target===0){side='r';return goTo(Math.max(1,Math.min(N-1,+ST.s.i||1)))}
+ if(single()&&target===idx&&side==='l'&&idx>=2){side='r';return ui()}
+ if(target>=N-1){side='r';return goTo(0)}
+ side=target+1>=2?'l':'r';goTo(target+1)}
+function prev(){
+ if(single()&&target===idx&&side==='r'&&idx>=2){side='l';return ui()}
+ side='r';goTo(target-1)}
+book.addEventListener('click',e=>{if(drawing)return;if(e.target.closest('[data-g]'))return;const l=e.target.closest('.leaf');if(!l)return;if(single()&&idx>0)return;const i=leaves.indexOf(l);if(i===N-1)return;if(i===idx)next();else if(i===idx-1)prev()});
+$('#next').onclick=next;$('#prev').onclick=prev;
+let sx=null;
+document.addEventListener('touchstart',e=>{sx=e.target.closest('.ov,.controls,.dt')?null:e.touches[0].clientX},{passive:true});
+document.addEventListener('touchend',e=>{if(sx===null||idx===0||drawing||ov.classList.contains('on'))return;const d=e.changedTouches[0].clientX-sx;sx=null;if(d<-50&&target<N-1)next();else if(d>50)prev()},{passive:true});
+ui();
+
+/* ============ OYNA: O'YINLAR VA VIKTORINA ============ */
+const ov=$('#ov'),sheet=$('#sheet'),INK='#1d2f9a';
+function ovOpen(html,init){ovClose();sheet.innerHTML=html;ov.classList.add('on');cur=init()}
+function ovClose(){if(cur&&cur.stop)cur.stop();cur=null;sheet.onpointerdown=null;ov.classList.remove('on')}
+sheet.addEventListener('click',e=>{const t=e.target.closest('[data-x],[data-r],[data-o],[data-n]');if(!t)return;
+if('x' in t.dataset)ovClose();else if('r' in t.dataset)cur.reset();else if('o' in t.dataset)cur.pick(+t.dataset.o);else cur.next()});
+document.addEventListener('click',e=>{if(drawing)return;const g=e.target.closest('[data-g]');if(g)({tetris,snake,quiz})[g.dataset.g]()});
+document.addEventListener('keydown',e=>{
+ if(ov.classList.contains('on')){if(e.key==='Escape')ovClose();else if(cur&&cur.key&&cur.key(e))e.preventDefault();return}
+ if(e.key==='Escape'&&drawing){setDraw(false);return}
+ if(e.key==='ArrowRight'&&target<N-1)next();else if(e.key==='ArrowLeft')prev();
+ else if((e.key==='Enter'||e.key===' ')&&idx===0&&document.activeElement===leaves[0]){e.preventDefault();next()}
+ else if((e.key==='Enter')&&document.activeElement.dataset.g)document.activeElement.click()});
+const rnd=s=>{s=Math.sin(s*127.1)*43758.5453;return s-Math.floor(s)};
+const gridBg=(c,w,h,s)=>{c.fillStyle='#fbf8ee';c.fillRect(0,0,w,h);c.strokeStyle='rgba(70,110,170,.35)';c.lineWidth=1;for(let y=s;y<h;y+=s){c.beginPath();c.moveTo(0,y);c.lineTo(w,y);c.stroke()};c.strokeStyle=INK;c.lineWidth=2;c.strokeRect(1,1,w-2,h-2)};
+const FS=c=>`700 ${c}px Caveat,"Segoe Print",cursive`;
+// bir xil "qoʻlda chizilgan" kvadrat: qalam boʻyogʻi + ikki marta chizilgan kontur
+function blk(c,x,y,s,col,sd){c.globalAlpha=.7;c.fillStyle=col;c.fillRect(x+2,y+2,s-4,s-4);c.globalAlpha=1;c.strokeStyle=INK;c.lineCap='round';
+ for(let k=0;k<2;k++){const j=i=>(rnd(sd*7+k*13+i)-.5)*s*.14;c.lineWidth=1+rnd(sd+k)*1.3;c.beginPath();c.moveTo(x+j(1),y+j(2));c.lineTo(x+s+j(3),y+j(4));c.lineTo(x+s+j(5),y+s+j(6));c.lineTo(x+j(7),y+s+j(8));c.closePath();c.stroke()}}
+function blob(c,x,y,r,col,sd){c.beginPath();for(let k=0;k<=10;k++){const a=k/10*6.283,q=r*(.88+rnd(sd+k%10)*.24);c[k?'lineTo':'moveTo'](x+Math.cos(a)*q,y+Math.sin(a)*q)}c.globalAlpha=.75;c.fillStyle=col;c.fill();c.globalAlpha=1;c.strokeStyle=INK;c.lineWidth=1.6;c.stroke()}
+const over=(c,w,h,s)=>{c.fillStyle='rgba(251,248,238,.82)';c.fillRect(0,h/2-s*1.6,w,s*3.2);c.fillStyle=INK;c.font=FS(s*1.5);c.textAlign='center';c.fillText('Oʻyin tugadi!',w/2,h/2+s*.4)};
+
+/* ---------- TETRIS ---------- */
+function tetris(){
+ const W=10,H=20,cs=Math.max(14,Math.min(28,Math.floor(Math.min((innerWidth-70)/W,(innerHeight-330)/H))));
+ ovOpen(`<div class="bar"><button class="hb" data-x>← Daftarga</button><b>Tetris</b><span id="sc">Ball: 0</span></div><canvas id="cv" width="${W*cs}" height="${H*cs}"></canvas>
+<div class="pad"><button class="hb" data-a="l">←</button><button class="hb" data-a="u">↻</button><button class="hb" data-a="r">→</button><button class="hb" data-a="d">↓</button><button class="hb" data-a="h">⤓</button></div><button class="hb" data-r>Qaytadan</button>`,()=>{
+ const cv=$('#cv'),c=cv.getContext('2d');
+ const SH=[[[1,1,1,1]],[[1,1],[1,1]],[[0,1,0],[1,1,1]],[[0,1,1],[1,1,0]],[[1,1,0],[0,1,1]],[[1,0,0],[1,1,1]],[[0,0,1],[1,1,1]]];
+ const CO=['#6ec6e6','#f4d35e','#b58fd9','#7bc47f','#ee7b6b','#6f8fe0','#f2a65a'];
+ let b,p,sc,ln,end,tm,dead=false;
+ const hit=(m,x,y)=>m.some((r,j)=>r.some((v,i)=>v&&(x+i<0||x+i>=W||y+j>=H||(y+j>=0&&b[y+j][x+i]))));
+ const nw=()=>{const i=Math.random()*7|0;p={m:SH[i],c:i,x:3,y:0};if(hit(p.m,p.x,p.y))end=true};
+ const rot=m=>m[0].map((_,i)=>m.map(r=>r[i]).reverse());
+ const lock=()=>{p.m.forEach((r,j)=>r.forEach((v,i)=>{if(v&&p.y+j>=0)b[p.y+j][p.x+i]=p.c+1}));let n=0;
+  for(let y=H-1;y>=0;){if(b[y].every(v=>v)){b.splice(y,1);b.unshift(Array(W).fill(0));n++}else y--}
+  sc+=[0,100,300,500,800][n];ln+=n;$('#sc').textContent='Ball: '+sc;nw()};
+ const down=()=>{if(!hit(p.m,p.x,p.y+1))p.y++;else lock()};
+ const draw=()=>{gridBg(c,cv.width,cv.height,cs);
+  b.forEach((r,y)=>r.forEach((v,x)=>v&&blk(c,x*cs,y*cs,cs,CO[v-1],x*3+y*17)));
+  if(!end)p.m.forEach((r,j)=>r.forEach((v,i)=>v&&blk(c,(p.x+i)*cs,(p.y+j)*cs,cs,CO[p.c],(p.x+i)*3+(p.y+j)*17+99)));
+  if(end)over(c,cv.width,cv.height,cs)};
+ const step=()=>{if(dead||end)return;down();draw();tm=setTimeout(step,Math.max(110,700-ln*30))};
+ const act=a=>{if(end||dead)return;
+  if(a==='l'&&!hit(p.m,p.x-1,p.y))p.x--;
+  else if(a==='r'&&!hit(p.m,p.x+1,p.y))p.x++;
+  else if(a==='d')down();
+  else if(a==='u'){const r=rot(p.m);for(const k of[0,-1,1,-2,2])if(!hit(r,p.x+k,p.y)){p.m=r;p.x+=k;break}}
+  else if(a==='h'){while(!hit(p.m,p.x,p.y+1))p.y++;lock()}
+  draw()};
+ const reset=()=>{clearTimeout(tm);b=Array.from({length:H},()=>Array(W).fill(0));sc=0;ln=0;end=false;$('#sc').textContent='Ball: 0';nw();draw();tm=setTimeout(step,700)};
+ sheet.onpointerdown=e=>{const t=e.target.closest('[data-a]');if(t){e.preventDefault();act(t.dataset.a)}};
+ reset();
+ return{reset,stop(){dead=true;clearTimeout(tm)},key(e){const m={ArrowLeft:'l',ArrowRight:'r',ArrowUp:'u',ArrowDown:'d',' ':'h'}[e.key];if(!m)return false;act(m);return true}}})}
+
+/* ---------- ZMEYKA / SNAKE ---------- */
+function snake(){
+ const G=16,cs=Math.max(14,Math.min(26,Math.floor(Math.min(innerWidth-70,innerHeight-330)/G)));
+ ovOpen(`<div class="bar"><button class="hb" data-x>← Daftarga</button><b>Ilon</b><span id="sc">Ball: 0</span></div><canvas id="cv" width="${G*cs}" height="${G*cs}"></canvas>
+<div class="pad"><button class="hb" data-a="l">←</button><button class="hb" data-a="u">↑</button><button class="hb" data-a="d">↓</button><button class="hb" data-a="r">→</button></div><button class="hb" data-r>Qaytadan</button>`,()=>{
+ const cv=$('#cv'),c=cv.getContext('2d'),S=G*cs;let s,d,q,f,sc,end,tm,dead=false;
+ const food=()=>{do f={x:Math.random()*G|0,y:Math.random()*G|0};while(s.some(p=>p.x===f.x&&p.y===f.y))};
+ const draw=()=>{gridBg(c,S,S,cs);
+  blob(c,f.x*cs+cs/2,f.y*cs+cs/2+1,cs*.38,'#ee6b5f',f.x*5+f.y);c.beginPath();c.moveTo(f.x*cs+cs/2,f.y*cs+cs*.2);c.quadraticCurveTo(f.x*cs+cs*.6,f.y*cs-1,f.x*cs+cs*.75,f.y*cs+2);c.stroke();
+  for(let i=s.length-1;i>=0;i--)blob(c,s[i].x*cs+cs/2,s[i].y*cs+cs/2,cs*.47,i?'#74c26f':'#4fae5a',i*3.7+1);
+  c.fillStyle=INK;c.beginPath();c.arc(s[0].x*cs+cs/2+d.x*cs*.12-d.y*cs*.15,s[0].y*cs+cs/2+d.y*cs*.12+d.x*cs*.15,cs*.08,0,7);c.fill();
+  if(end)over(c,S,S,cs)};
+ const step=()=>{if(dead||end)return;if(q.length)d=q.shift();const h={x:s[0].x+d.x,y:s[0].y+d.y};
+  if(h.x<0||h.y<0||h.x>=G||h.y>=G||s.some(p=>p.x===h.x&&p.y===h.y)){end=true;draw();return}
+  s.unshift(h);if(h.x===f.x&&h.y===f.y){sc++;$('#sc').textContent='Ball: '+sc;food()}else s.pop();
+  draw();tm=setTimeout(step,Math.max(70,160-sc*4))};
+ const act=a=>{const v={l:[-1,0],r:[1,0],u:[0,-1],d:[0,1]}[a],t=q.length?q[q.length-1]:d;
+  if(!v||(t.x+v[0]===0&&t.y+v[1]===0)||(t.x===v[0]&&t.y===v[1])||q.length>1)return;q.push({x:v[0],y:v[1]})};
+ const reset=()=>{clearTimeout(tm);s=[{x:8,y:8},{x:7,y:8},{x:6,y:8}];d={x:1,y:0};q=[];sc=0;end=false;$('#sc').textContent='Ball: 0';food();draw();tm=setTimeout(step,350)};
+ sheet.onpointerdown=e=>{const t=e.target.closest('[data-a]');if(t){e.preventDefault();act(t.dataset.a)}};
+ let tx,ty;cv.ontouchstart=e=>{tx=e.touches[0].clientX;ty=e.touches[0].clientY};
+ cv.ontouchend=e=>{const x=e.changedTouches[0].clientX-tx,y=e.changedTouches[0].clientY-ty;if(Math.abs(x)+Math.abs(y)<20)return;act(Math.abs(x)>Math.abs(y)?(x>0?'r':'l'):(y>0?'d':'u'))};
+ reset();
+ return{reset,stop(){dead=true;clearTimeout(tm)},key(e){const m={ArrowLeft:'l',ArrowRight:'r',ArrowUp:'u',ArrowDown:'d',a:'l',d:'r',w:'u',s:'d'}[e.key];if(!m)return false;act(m);return true}}})}
+
+/* ---------- VIKTORINA ---------- */
+function quiz(){
+ ovOpen('<div class="bar"><button class="hb" data-x>← Daftarga</button><b>Viktorina</b></div><div id="qb"></div>',()=>{
+ const qb=$('#qb');let i=0,sc=0,done=false,opts=[];
+ const show=()=>{if(i>=Q.length)return fin();const q=Q[i];done=false;opts=q.a.map((t,k)=>[t,k===q.c]).sort(()=>Math.random()-.5);
+  qb.innerHTML=`<p class="pg">${i+1} / ${Q.length}</p><p class="qq">${q.q}</p>${opts.map((o,k)=>`<button class="hb op" data-o="${k}">${o[0]}</button>`).join('')}<div id="fb"></div>`};
+ const pick=k=>{if(done)return;done=true;const ok=opts[k][1];if(ok)sc++;
+  $$('.op').forEach((b,n)=>{if(opts[n][1])b.classList.add('ok');else if(n===k)b.classList.add('no')});
+  $('#fb').innerHTML=`<p class="${ok?'good':'bad'}">${ok?'✓ Toʻgʻri!':'✗ Xato.'} ${Q[i].e}</p><button class="hb" data-n>${i+1<Q.length?'Keyingi →':'Natija'}</button>`};
+ const fin=()=>{const r=sc/Q.length;qb.innerHTML=`<p class="qq">Natija: ${sc} / ${Q.length}</p><p>${r>=.8?'Ajoyib! Siz mavzuni juda yaxshi oʻzlashtirdingiz.':r>=.5?'Yaxshi! Daftarni yana bir bor oʻqib chiqing.':'Daftarni diqqat bilan qayta oʻqing va yana urinib koʻring.'}</p><button class="hb" data-r>Qayta topshirish</button>`};
+ show();
+ return{pick,next(){i++;show()},reset(){i=0;sc=0;show()}}})}
+
+/* ============ CHIZISH (Canvas har bir sahifa ustida, vektor shtrixlar, localStorage) ============ */
+const LS='mh_daftar_v2',ST={d:{},s:{t:'pen',w:2,i:1}};
+try{const j=JSON.parse(localStorage.getItem(LS)||'{}');if(j.d)ST.d=j.d;if(j.s)Object.assign(ST.s,j.s)}catch(e){}
+const TL={pen:{c:'#1d2f9a',a:.92},red:{c:'#c0392b',a:.82},pencil:{c:'#3b3b44',a:.5}},WS=[1.3,2.4,4.2];
+let hist=[],redo=[],tSave,tToast,dr=null,cf=0;
+const toast=m=>{const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(tToast);tToast=setTimeout(()=>t.classList.remove('on'),1500)};
+function save(m){try{localStorage.setItem(LS,JSON.stringify(ST));if(m)toast(m)}catch(e){toast('Joy yetmadi — saqlanmadi!')}}
+const saveSoon=m=>{clearTimeout(tSave);tSave=setTimeout(()=>save(m),400)};
+const CV={};$$('.dc').forEach(c=>CV[c.dataset.k]=c);
+const SL=k=>ST.d[k]||(ST.d[k]=[]);
+function seg(x,W,H,s,i){const T=TL[s.t],a=s.p[i-1]||s.p[i],b=s.p[i],bw=s.w*W/430,r=rnd(s.sd+i);x.lineCap=x.lineJoin='round';x.strokeStyle=x.fillStyle=T.c;
+ if(s.p.length===1){x.globalAlpha=T.a;x.beginPath();x.arc(b[0]*W,b[1]*H,bw*.6,0,7);x.fill();x.globalAlpha=1;return}
+ if(i<1)return;
+ if(s.t==='pencil'){for(let k=0;k<2;k++){const j=(rnd(s.sd+i*3+k)-.5)*bw*.6;x.globalAlpha=T.a*(.45+rnd(s.sd+i*5+k)*.55);x.lineWidth=bw*(.8+k*.35);x.beginPath();x.moveTo(a[0]*W+j,a[1]*H+j);x.lineTo(b[0]*W+j,b[1]*H-j);x.stroke()}}
+ else{x.globalAlpha=T.a*(.86+r*.14);x.lineWidth=bw*(.85+.2*Math.sin(i*.3+s.sd)+.2*(b[2]-.5));x.beginPath();x.moveTo(a[0]*W,a[1]*H);x.lineTo(b[0]*W,b[1]*H);x.stroke()}
+ x.globalAlpha=1}
+function ctx(c){const W=c.clientWidth,H=c.clientHeight,x=c.getContext('2d');x.setTransform(c.width/W,0,0,c.height/H,0,0);return[x,W,H]}
+function redraw(k){const c=CV[k];if(!c||c.width<=1)return;const[x,W,H]=ctx(c);x.clearRect(0,0,W,H);SL(k).forEach(s=>s.p.forEach((_,i)=>seg(x,W,H,s,i)))}
+function fit(){const dpr=Math.min(devicePixelRatio||1,2);for(const k in CV){const c=CV[k],i=+k.slice(1);
+ if(i<idx-3||i>idx){if(c.width>1)c.width=c.height=1;continue}
+ const W=c.clientWidth,H=c.clientHeight;if(!W)continue;const pw=Math.round(W*dpr);if(c.width===pw)continue;c.width=pw;c.height=Math.round(H*dpr);redraw(k)}}
+const xy=(e,c)=>{const r=c.getBoundingClientRect();return[+((e.clientX-r.left)/r.width).toFixed(4),+((e.clientY-r.top)/r.height).toFixed(4),e.pressure>0?+e.pressure.toFixed(2):.5]};
+function dseg(p,a,b,ar){const px=p[0],py=p[1]*ar,ax=a[0],ay=a[1]*ar,bx=b[0],by=b[1]*ar,dx=bx-ax,dy=by-ay,l=dx*dx+dy*dy;let t=l?((px-ax)*dx+(py-ay)*dy)/l:0;t=Math.max(0,Math.min(1,t));return Math.hypot(px-ax-t*dx,py-ay-t*dy)}
+function erase(p){const c=dr.c,W=c.clientWidth,H=c.clientHeight,r=(7+ST.s.w*5)/W,L=SL(dr.k);let hit=0;
+ for(let i=L.length-1;i>=0;i--)if(L[i].p.some((q,j,a)=>dseg(p,a[j-1]||q,q,H/W)<r)){dr.rm.push([i,L[i]]);L.splice(i,1);hit=1}
+ if(hit)redraw(dr.k)}
+Object.values(CV).forEach(c=>{
+ c.addEventListener('pointerdown',e=>{if(!drawing||dr||(e.pointerType==='mouse'&&e.button!==0))return;e.preventDefault();c.setPointerCapture(e.pointerId);
+  const k=c.dataset.k,p=xy(e,c);dr={k,c,id:e.pointerId,er:ST.s.t==='eraser',rm:[]};
+  if(dr.er)erase(p);else{dr.s={t:ST.s.t,w:WS[ST.s.w-1],sd:Math.random()*1e4|0,p:[p]};SL(k).push(dr.s);const[x,W,H]=ctx(c);seg(x,W,H,dr.s,0)}});
+ c.addEventListener('pointermove',e=>{if(!dr||dr.id!==e.pointerId)return;e.preventDefault();
+  const ev=e.getCoalescedEvents?e.getCoalescedEvents():[];(ev.length?ev:[e]).forEach(v=>{const p=xy(v,c);
+   if(dr.er)return erase(p);const q=dr.s.p,l=q[q.length-1];if(Math.hypot(p[0]-l[0],(p[1]-l[1])*c.clientHeight/c.clientWidth)<.003)return;
+   p[0]=+(l[0]+(p[0]-l[0])*.75).toFixed(4);p[1]=+(l[1]+(p[1]-l[1])*.75).toFixed(4);q.push(p);const[x,W,H]=ctx(c);seg(x,W,H,dr.s,q.length-1)})});
+ const end=e=>{if(!dr||dr.id!==e.pointerId)return;const d=dr;dr=null;
+  if(d.er){if(!d.rm.length)return;hist.push({t:'e',k:d.k,r:d.rm})}else hist.push({t:'a',k:d.k,s:d.s});
+  if(hist.length>150)hist.shift();redo=[];saveSoon('Saqlandi ✓')};
+ c.addEventListener('pointerup',end);c.addEventListener('pointercancel',end);
+ c.addEventListener('dragstart',e=>e.preventDefault());c.addEventListener('contextmenu',e=>{if(drawing)e.preventDefault()})});
+function ap(a,u){if(a.t==='g')return(u?[...a.l].reverse():a.l).forEach(y=>ap(y,u));const L=SL(a.k);
+ if(a.t==='a'){if(u){const i=L.indexOf(a.s);if(i>-1)L.splice(i,1)}else L.push(a.s)}
+ else if(a.t==='e'){if(u)[...a.r].sort((x,y)=>x[0]-y[0]).forEach(([i,s])=>L.splice(i,0,s));else a.r.forEach(([,s])=>{const i=L.indexOf(s);if(i>-1)L.splice(i,1)})}
+ else ST.d[a.k]=u?a.s.slice():[];
+ redraw(a.k)}
+$('#un').onclick=()=>{const a=hist.pop();if(!a)return toast('Bekor qilinadigan narsa yoʻq');redo.push(a);ap(a,true);saveSoon('Bekor qilindi')};
+$('#re').onclick=()=>{const a=redo.pop();if(!a)return toast('Qaytariladigan narsa yoʻq');hist.push(a);ap(a,false);saveSoon('Qaytarildi')};
+const visKeys=()=>{const o=[];for(const k in CV){const i=+k.slice(1),r=CV[k].getBoundingClientRect();if(k[0]==='f'?i===idx-1:i===idx-2)if(r.right>2&&r.left<innerWidth-2)o.push(k)}return o};
+$('#cl').onclick=()=>{const b=$('#cl');if(!cf){b.textContent='Rostdan ham?';cf=setTimeout(()=>{cf=0;b.textContent='Tozalash'},3000);return}
+ clearTimeout(cf);cf=0;b.textContent='Tozalash';const ks=visKeys().filter(k=>SL(k).length);if(!ks.length)return toast('Sahifa boʻsh');
+ hist.push({t:'g',l:ks.map(k=>({t:'c',k,s:SL(k).slice()}))});redo=[];ks.forEach(k=>{ST.d[k]=[];redraw(k)});save('Sahifa tozalandi')};
+function sync(){$$('#dt [data-t]').forEach(b=>b.classList.toggle('on',b.dataset.t===ST.s.t));$$('#dt [data-w]').forEach(b=>b.classList.toggle('on',+b.dataset.w===ST.s.w))}
+function setDraw(on){if(on&&idx<1)return;drawing=on;document.body.classList.toggle('drawing',on);$('#dt').hidden=!on;$('#dm').textContent=on?'Oʻqish rejimi':'✎ Chizish';sync();toast(on?'Chizish rejimi':'Oʻqish rejimi')}
+$('#dm').onclick=()=>setDraw(!drawing);$('#ex').onclick=()=>setDraw(false);
+$('#dt').onclick=e=>{const b=e.target.closest('[data-t],[data-w]');if(!b)return;if(b.dataset.t)ST.s.t=b.dataset.t;else ST.s.w=+b.dataset.w;sync();save()};
+function onPage(){if(idx>0)ST.s.i=Math.min(idx,N-1);fit();saveSoon()}
+function lay(){const r=document.documentElement.style;r.setProperty('--W',document.documentElement.clientWidth+'px');r.setProperty('--H',innerHeight+'px');fit()}
+addEventListener('resize',()=>{lay();ui()});addEventListener('orientationchange',()=>setTimeout(lay,250));lay();sync();
+function fitText(){$$('.content').forEach(c=>{c.style.fontSize='';let k=1;while(c.scrollHeight>c.clientHeight+1&&k>.6){k-=.04;c.style.fontSize='calc(var(--pw)*'+(.0615*k).toFixed(4)+')'}})}
+fitText();if(document.fonts)document.fonts.ready.then(fitText);
+
+</script>
+</body>
+</html>
